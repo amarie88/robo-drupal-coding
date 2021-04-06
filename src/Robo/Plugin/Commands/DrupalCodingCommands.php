@@ -6,7 +6,6 @@ use Consolidation\Config\Loader\ConfigProcessor;
 use Consolidation\Config\Loader\YamlConfigLoader;
 use DrupalFinder\DrupalFinder;
 use Robo\Tasks;
-use Robo\Result;
 use Robo\Config\Config;
 
 /**
@@ -17,95 +16,177 @@ use Robo\Config\Config;
 class DrupalCodingCommands extends Tasks {
 
   /**
-   * Command to run drupal-check.
+   * Config.
+   *
+   * @var \Robo\Config
+   */
+  private $config;
+
+  /**
+   * Command to run drupal-check with options.
    *
    * @command drupal-coding:check
-   *
-   * @return \Robo\Result
-   *   The result of the collection of tasks.
    */
-  public function drupalCheck(): Result {
-    $collection = $this->collectionBuilder();
-    $tasks = [];
+  public function drupalCheck() {
 
-    $tasks[] = $this->taskExec('vendor/mglaman/drupal-check/drupal-check')
-      ->arg('-d')
-      ->option('exclude-dir=node_modules,vendor')
-      ->args('web/modules/contrib/token');
+    if ($this->loadConfig()) {
 
-    $collection->addTaskList($tasks);
+      // Get drupal-check config.
+      $drupalCheckOptions = [];
 
-    return $collection->run();
+      $drupalCheckType = $this->config->get('drupal.drupal_check.option');
+      if (!empty($drupalCheckType)) {
+        $drupalCheckOption = $drupalCheckType;
+      }
+
+      $drupalCheckFormat = $this->config->get('drupal.drupal_check.format');
+      if (!empty($drupalCheckFormat)) {
+        $drupalCheckOptions['format'] = $drupalCheckFormat;
+      }
+
+      $drupalCheckExclude = $this->config->get('drupal.drupal_check.exclude_dir');
+      if (!empty($drupalCheckExclude)) {
+        $drupalCheckOptions['exclude-dir'] = implode(',', $drupalCheckExclude);
+      }
+
+      // Path(s) to inspect.
+      $drupalCheckPaths = $this->config->get('drupal.drupal_check.paths');
+
+      // Create collection builder.
+      $collection = $this->collectionBuilder();
+      $tasks = [];
+
+      $tasks[] = $this->taskExec('vendor/mglaman/drupal-check/drupal-check')
+        ->option($drupalCheckOption)
+        ->options($drupalCheckOptions, '=')
+        ->option('no-interaction')
+        ->args($drupalCheckPaths);
+
+      // Add tasks to collection.
+      $collection->addTaskList($tasks);
+
+      // Run collection.
+      $collection->run();
+
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
   }
 
   /**
-   * Command to run phpcs with standard options.
+   * Command to run phpcs with options.
    *
    * @command drupal-coding:phpcs
-   *
-   * @return \Robo\Result
-   *   The result of the collection of tasks.
    */
-  public function drupalCoder(): Result {
+  public function codeSniffer() {
 
-    // Get code_sniffer config.
-    $php_sniffer_options = [];
-    $php_config_options = ['standard', 'extensions', 'ignore', 'report'];
-    foreach ($php_config_options as $config_option) {
-      $option_list = $this->loadConfig()->get('php.code_sniffer.' . $config_option);
-      if (!empty($option_list)) {
-        $option = implode(',', $option_list);
-        $php_sniffer_options[$config_option] = $option;
+    if ($this->loadConfig()) {
+
+      // Get code_sniffer config.
+      $phpSnifferOptions = [];
+
+      $phpConfigOptions = [
+        'report',
+        'standard',
+        'extensions',
+        'ignore',
+      ];
+      foreach ($phpConfigOptions as $configOption) {
+        $optionList = $this->config->get('php.code_sniffer.' . $configOption);
+        if (!empty($optionList)) {
+          $option = implode(',', $optionList);
+          $phpSnifferOptions[$configOption] = $option;
+        }
       }
+
+      // Path(s) to inspect.
+      $phpSnifferPaths = $this->config->get('php.code_sniffer.paths');
+
+      // Create collection builder.
+      $collection = $this->collectionBuilder();
+      $tasks = [];
+
+      // Task for register the standards with PHPCS.
+      $tasks[] = $this->codeSnifferInit();
+
+      // Task for run PHPCS command.
+      $tasks[] = $this->codeSnifferExec()
+        ->option('colors')
+        ->options($phpSnifferOptions, '=')
+        ->args($phpSnifferPaths);
+
+      // Add tasks in collection.
+      $collection->addTaskList($tasks);
+
+      // Run collection.
+      $collection->run();
+
+      return TRUE;
     }
-    $php_sniffer_folders = $this->loadConfig()->get('php.code_sniffer.folders');
+    else {
+      return FALSE;
+    }
+  }
 
-    $collection = $this->collectionBuilder();
-    $tasks = [];
-
-    $tasks[] = $this->codeSniffer()
+  /**
+   * Install coder_sniffer.
+   */
+  protected function codeSnifferInit() {
+    $codeSnifferInit = $this->codeSnifferExec()
       ->option('config-set')
       ->args('installed_paths', 'vendor/drupal/coder/coder_sniffer');
 
-    $tasks[] = $this->codeSniffer()
-      ->options($php_sniffer_options, '=')
-      ->option('colors')
-      ->args($php_sniffer_folders);
-
-    $collection->addTaskList($tasks);
-
-    return $collection->run();
+    return $codeSnifferInit;
   }
 
   /**
-   * Return phpcs with default arguments.
+   * Return PHPCS with default arguments.
    *
    * @return \Robo\Task\Base\Exec
-   *   A phpcs exec command.
+   *   A PHPCS exec command.
    */
-  protected function codeSniffer() {
+  protected function codeSnifferExec() {
     return $this->taskExec('vendor/squizlabs/php_codesniffer/bin/phpcs');
+  }
+
+  /**
+   * Return PHPCBF with default arguments.
+   *
+   * @return \Robo\Task\Base\Exec
+   *   A PHPCBF exec command.
+   */
+  protected function codeBeautifierFixerExec() {
+    return $this->taskExec('vendor/squizlabs/php_codesniffer/bin/phpcbf');
   }
 
   /**
    * Load config.
    */
   protected function loadConfig() {
-    $config = new Config();
+    $this->config = new Config();
     $loader = new YamlConfigLoader();
     $processor = new ConfigProcessor();
 
-    // Load config.
+    // Locate root directory.
     $drupalFinder = new DrupalFinder();
     if ($drupalFinder->locateRoot(rtrim('.', '/'))) {
       $composerRoot = $drupalFinder->getComposerRoot();
-      $custom_config = $composerRoot . '/robo-drupal-coding.yml';
-      if (file_exists($custom_config)) {
-        $processor->extend($loader->load($custom_config));
+      $customConfig = $composerRoot . '/robo-drupal-coding.yml';
+      // Init config file if not exist.
+      if (!file_exists($customConfig)) {
+        $this->taskFilesystemStack()->copy(dirname(__DIR__, 4) . '/config/robo-drupal-coding.yml', $customConfig)->run();
+        $this->say("<error>Config init, please configure $customConfig in your project.</error>");
+        return FALSE;
       }
+      $processor->extend($loader->load($customConfig));
     }
 
-    return $config->import($processor->export());
+    // Import configuration.
+    $this->config->import($processor->export());
+
+    return TRUE;
   }
 
 }

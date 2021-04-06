@@ -23,6 +23,7 @@
   "require-dev": {
     "drupal/coder": "^8.3",
     "mglaman/drupal-check": "^1.1",
+    "phpspec/prophecy-phpunit": "^2",
     "phpunit/phpunit": "^9.5",
     "squizlabs/php_codesniffer": "^3.5"
   },

@@ -5,6 +5,7 @@ Extension to apply Drupal Coding Standards with commands [Robo](http://robo.li/)
 ## Table of contents
 
 - [Installation](#installation)
+- [Configuration](#configuration)
 - [Usage](#usage)
 
 ## Installation
@@ -25,6 +26,12 @@ OR
 
 ```bash
 composer require --dev amarie88/robo-drupal-coding:~0.1
+```
+
+## Configuration
+
+```bash
+robo-drupal-coding.yml
 ```
 
 ## Usage

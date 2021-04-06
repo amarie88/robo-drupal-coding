@@ -1,12 +1,17 @@
 drupal:
   drupal_check:
-    exclude:
+    option: deprecations
+    format: table
+    exclude_dir:
       - node_modules
       - vendor
-    folders:
+    paths:
       - web/modules/custom
 php:
   code_sniffer:
+    report:
+      - full
+      - summary
     standard:
       - Drupal
       - DrupalPractice
@@ -26,8 +31,6 @@ php:
     ignore:
       - node_modules
       - vendor
-    report:
-      - full
-      - summary
-    folders:
+      - tests
+    paths:
       - web/modules/custom
