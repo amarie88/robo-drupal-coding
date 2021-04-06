@@ -1,0 +1,33 @@
+drupal:
+  drupal_check:
+    exclude:
+      - node_modules
+      - vendor
+    folders:
+      - web/modules/custom
+php:
+  code_sniffer:
+    standard:
+      - Drupal
+      - DrupalPractice
+    extensions:
+      - php
+      - module
+      - inc
+      - install
+      - test
+      - profile
+      - theme
+      - css
+      - info
+      - txt
+      - md
+      - yml
+    ignore:
+      - node_modules
+      - vendor
+    report:
+      - full
+      - summary
+    folders:
+      - web/modules/custom
