@@ -3,7 +3,6 @@
   "type": "robo-tasks",
   "description": "Drupal coding command for Robo Task Runner.",
   "keywords": ["drupal","robo"],
-  "version": "dev-master",
   "license": "MIT",
   "authors": [
     {

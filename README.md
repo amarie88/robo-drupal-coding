@@ -10,12 +10,12 @@ Extension to apply Drupal Coding Standards with commands [Robo](http://robo.li/)
 
 ## Installation
 
-Add `"amarie88/robo-drupal-coding": "~0.1"` to your composer.json:
+Add `"amarie88/robo-drupal-coding": "~1.0"` to your composer.json:
 
 ```json
 {
     "require-dev": {
-        "amarie88/robo-drupal-coding": "~0.1"
+        "amarie88/robo-drupal-coding": "~1.0"
     }
 }
 ```
@@ -25,7 +25,7 @@ and execute `composer update`.
 OR
 
 ```bash
-composer require --dev amarie88/robo-drupal-coding:~0.1
+composer require --dev amarie88/robo-drupal-coding:~1.0
 ```
 
 ## Configuration
