@@ -39,10 +39,7 @@ class DrupalCodingCommands extends Tasks {
         $drupalCheckOption = $drupalCheckType;
       }
 
-      $drupalCheckFormat = $this->config->get('drupal.drupal_check.format');
-      if (!empty($drupalCheckFormat)) {
-        $drupalCheckOptions['format'] = $drupalCheckFormat;
-      }
+      $drupalCheckOptions['format'] = $this->config->get('drupal.drupal_check.format', 'table');
 
       $drupalCheckExclude = $this->config->get('drupal.drupal_check.exclude_dir');
       if (!empty($drupalCheckExclude)) {

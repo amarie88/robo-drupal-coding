@@ -1,7 +1,7 @@
 {
   "name": "amarie88/robo-drupal-coding",
   "type": "robo-tasks",
-  "description": "Drupal coding command for Robo Task Runner.",
+  "description": "Drupal coding commands for Robo Task Runner.",
   "keywords": ["drupal","robo"],
   "license": "MIT",
   "authors": [
@@ -17,13 +17,11 @@
   },
   "require": {
     "php": ">=7.3.0",
-    "consolidation/robo": "~2.0"
-  },
-  "require-dev": {
+    "consolidation/robo": "~2.0",
     "drupal/coder": "^8.3",
     "mglaman/drupal-check": "^1.1",
     "phpspec/prophecy-phpunit": "^2",
-    "phpunit/phpunit": "^9.5",
+    "phpunit/phpunit": "^8.4.1 || ^9",
     "squizlabs/php_codesniffer": "^3.5"
   },
   "minimum-stability": "dev",
