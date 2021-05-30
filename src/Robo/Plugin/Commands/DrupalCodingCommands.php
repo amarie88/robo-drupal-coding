@@ -75,9 +75,12 @@ class DrupalCodingCommands extends Tasks {
   /**
    * Command to run phpcs with options.
    *
+   * @param string $standard
+   *   The name or path of the coding standard to use.
+   *
    * @command drupal-coding:phpcs
    */
-  public function codeSniffer() {
+  public function codeSniffer($standard = NULL) {
 
     if ($this->loadConfig()) {
 
@@ -96,6 +99,11 @@ class DrupalCodingCommands extends Tasks {
           $option = implode(',', $optionList);
           $phpSnifferOptions[$configOption] = $option;
         }
+      }
+
+      // Override the coding standard to use.
+      if (!empty($standard)) {
+        $phpSnifferOptions['standard'] = $standard;
       }
 
       // Path(s) to inspect.

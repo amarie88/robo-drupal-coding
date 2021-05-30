@@ -2,6 +2,8 @@
 
 Extension to apply Drupal Coding Standards with commands [Robo](http://robo.li/).
 
+Intended to be used in a CI/CD context.
+
 ## Table of contents
 
 - [Installation](#installation)
@@ -36,14 +38,20 @@ robo-drupal-coding.yml
 
 ## Usage
 
-Check Drupal coding standards and best practices:
-
+* Check Drupal coding standards and best practices:
 ```bash
 vendor/bin/robo drupal-coding:phpcs
 ```
+* Only Drupal coding standards:
+```bash
+vendor/bin/robo drupal-coding:phpcs Drupal
+```
+* Only best practices:
+```bash
+vendor/bin/robo drupal-coding:phpcs DrupalPractice
+```
 
-Check Drupal code with `drupal-check`:
-
+* Check Drupal code with `drupal-check`:
 ```bash
 vendor/bin/robo drupal-coding:check
 ```
