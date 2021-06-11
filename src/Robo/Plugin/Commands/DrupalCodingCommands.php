@@ -63,9 +63,7 @@ class DrupalCodingCommands extends Tasks {
       $collection->addTaskList($tasks);
 
       // Run collection.
-      $collection->run();
-
-      return TRUE;
+      return $collection->run();
     }
     else {
       return FALSE;
@@ -126,9 +124,7 @@ class DrupalCodingCommands extends Tasks {
       $collection->addTaskList($tasks);
 
       // Run collection.
-      $collection->run();
-
-      return TRUE;
+      return $collection->run();
     }
     else {
       return FALSE;
