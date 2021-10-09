@@ -50,7 +50,6 @@ vendor/bin/robo drupal-coding:phpcs Drupal
 ```bash
 vendor/bin/robo drupal-coding:phpcs DrupalPractice
 ```
-
 * Check Drupal code with `drupal-check`:
 ```bash
 vendor/bin/robo drupal-coding:check

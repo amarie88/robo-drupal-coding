@@ -17,7 +17,7 @@
     },
     "require": {
         "php": ">=7.3.0",
-        "consolidation/robo": "~2.0",
+        "consolidation/robo": "^2.0 || ^3.0",
         "drupal/coder": "^8.3",
         "mglaman/drupal-check": "^1.1",
         "phpspec/prophecy-phpunit": "^2",
