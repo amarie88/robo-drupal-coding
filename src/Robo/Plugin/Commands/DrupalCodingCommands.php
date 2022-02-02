@@ -111,9 +111,6 @@ class DrupalCodingCommands extends Tasks {
       $collection = $this->collectionBuilder();
       $tasks = [];
 
-      // Task for register the standards with PHPCS.
-      $tasks[] = $this->codeSnifferInit();
-
       // Task for run PHPCS command.
       $tasks[] = $this->codeSnifferExec()
         ->option('colors')
@@ -129,17 +126,6 @@ class DrupalCodingCommands extends Tasks {
     else {
       return FALSE;
     }
-  }
-
-  /**
-   * Install coder_sniffer.
-   */
-  protected function codeSnifferInit() {
-    $codeSnifferInit = $this->codeSnifferExec()
-      ->option('config-set')
-      ->args('installed_paths', 'vendor/drupal/coder/coder_sniffer');
-
-    return $codeSnifferInit;
   }
 
   /**
