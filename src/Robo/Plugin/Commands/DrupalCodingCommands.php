@@ -5,8 +5,8 @@ namespace Amarie\RoboDrupalCoding\Robo\Plugin\Commands;
 use Consolidation\Config\Loader\ConfigProcessor;
 use Consolidation\Config\Loader\YamlConfigLoader;
 use DrupalFinder\DrupalFinder;
-use Robo\Tasks;
 use Robo\Config\Config;
+use Robo\Tasks;
 
 /**
  * Commands for apply Drupal Coding Standards.
